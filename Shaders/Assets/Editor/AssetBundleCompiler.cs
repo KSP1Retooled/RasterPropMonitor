@@ -19,17 +19,26 @@ public class AssetBundleCompiler
 		exportAssetBundle(BuildTarget.StandaloneOSX);
 	}
 
-	[MenuItem("Assets/Build Selected AssetBundle Linux")]
+	[MenuItem("Assets/Build Selected AssetBundle Linux64")]
 	static void BuildAssetBundleLinux()
 	{
-		exportAssetBundle(BuildTarget.StandaloneLinux);
+		exportAssetBundle(BuildTarget.StandaloneLinux64);
 	}
 
 	private static void exportAssetBundle(BuildTarget target)
 	{
+		string directory = string.Empty;
+		string name = string.Empty;
 		string path = EditorUtility.SaveFilePanel("Build Asset Bundle", "Assets", "NewAssetBundle", "assetbundle");
-		string directory = path.Substring(0, path.LastIndexOf('/'));
-		string name = path.Substring(path.LastIndexOf('/') + 1);
+		try
+		{
+			directory = path.Substring(0, path.LastIndexOf('/'));
+			name = path.Substring(path.LastIndexOf('/') + 1);
+		}
+		catch
+		{
+			return;
+		}
 		Object[] selection = Selection.GetFiltered(typeof(Object), SelectionMode.DeepAssets);
 		AssetBundleBuild build = new AssetBundleBuild();
 		build.assetBundleName = name;
